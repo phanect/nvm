@@ -2470,7 +2470,7 @@ nvm() {
         done < "${NVM_DIR}/default-packages"
       fi
 
-      if [ -n "${PROVIDED_REINSTALL_PACKAGES_FROM-}" ] && [ "$(nvm_ensure_version_prefix "${PROVIDED_REINSTALL_PACKAGES_FROM}")" = "${VERSION}" ]; then
+      if [ -n "$PROVIDED_REINSTALL_PACKAGES_FROM" ] && [ "$(nvm_ensure_version_prefix "${PROVIDED_REINSTALL_PACKAGES_FROM}")" = "${VERSION}" ]; then
         nvm_err "You can't reinstall global packages from the same version of node you're installing."
         return 4
       elif [ "${REINSTALL_PACKAGES_FROM-}" = 'N/A' ]; then

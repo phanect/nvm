@@ -27,11 +27,11 @@ install:
   - if [ -z "${SHELLCHECK-}" ]; then nvm install node && npm install && npm prune && npm ls urchin doctoc; fi
   - '[ -z "$WITHOUT_CURL" ] || sudo apt-get remove curl -y'
 script:
-  - if [ -n "${MAKE_RELEASE-}" ]; then export GIT_EDITOR="sed -i '1 s/^/99.99.99 make release test/'" && git fetch --unshallow --tags && echo proceed | make TAG=99.99.99 release ; fi
-  - if [ -n "${DOCTOCCHECK-}" ]; then cp README.md README.md.orig && npm run doctoc && diff -q README.md README.md.orig ; fi
-  - if [ -n "${SHELLCHECK-}" ]; then shellcheck -s bash nvm.sh && shellcheck -s sh nvm.sh && shellcheck -s dash nvm.sh && shellcheck -s ksh nvm.sh ; fi
-  - if [ -n "${SHELLCHECK-}" ]; then shellcheck -s bash install.sh bash_completion nvm-exec ; fi
-  - if [ -n "${SHELL-}" ] && [ -n "${TEST_SUITE}" ]; then make TEST_SUITE=$TEST_SUITE URCHIN="$(npm bin)/urchin" test-$SHELL ; fi
+  - set -eu; if [ -n "${MAKE_RELEASE-}" ]; then export GIT_EDITOR="sed -i '1 s/^/99.99.99 make release test/'" && git fetch --unshallow --tags && echo proceed | make TAG=99.99.99 release ; fi ; set +eu
+  - set -eu; if [ -n "${DOCTOCCHECK-}" ]; then cp README.md README.md.orig && npm run doctoc && diff -q README.md README.md.orig ; fi ; set +eu
+  - set -eu; if [ -n "${SHELLCHECK-}" ]; then shellcheck -s bash nvm.sh && shellcheck -s sh nvm.sh && shellcheck -s dash nvm.sh && shellcheck -s ksh nvm.sh ; fi ; set +eu
+  - set -eu; if [ -n "${SHELLCHECK-}" ]; then shellcheck -s bash install.sh bash_completion nvm-exec ; fi ; set +eu
+  - set -eu; if [ -n "${SHELL-}" ] && [ -n "${TEST_SUITE-}" ]; then make TEST_SUITE=$TEST_SUITE URCHIN="$(npm bin)/urchin" test-$SHELL ; fi ; set +eu
 after_success:
   - if [ -n "$WITHOUT_CURL" ]; then sudo apt-get install curl -y ; fi
 env:
